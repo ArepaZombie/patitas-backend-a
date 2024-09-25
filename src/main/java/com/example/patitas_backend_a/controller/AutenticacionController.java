@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/autenticacion")
@@ -22,7 +24,9 @@ public class AutenticacionController {
   public LoginResponseDTO login(@RequestBody LoginReqDTO request){
 
     try {
+      Thread.sleep(Duration.ofSeconds(60));
       String[] datoUsuario = autenticacionService.validarUsuario(request);
+      System.out.println("Resultado: "+Arrays.toString(datoUsuario));
       if(datoUsuario ==null){
         return new LoginResponseDTO("01","Error: Usuario no encontrado","","");
       }
@@ -30,6 +34,8 @@ public class AutenticacionController {
       return new LoginResponseDTO("00","",datoUsuario[0],datoUsuario[1]);
 
     } catch (IOException e) {
+      return new LoginResponseDTO("99","Error: Ocurrió un problema","","");
+    } catch (InterruptedException e) {
       return new LoginResponseDTO("99","Error: Ocurrió un problema","","");
     }
 

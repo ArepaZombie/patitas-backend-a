@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
 
@@ -24,7 +23,7 @@ public class AutenticacionController {
   public LoginResponseDTO login(@RequestBody LoginReqDTO request){
 
     try {
-      Thread.sleep(Duration.ofSeconds(60));
+      Thread.sleep(Duration.ofSeconds(5));
       String[] datoUsuario = autenticacionService.validarUsuario(request);
       System.out.println("Resultado: "+Arrays.toString(datoUsuario));
       if(datoUsuario ==null){
@@ -33,9 +32,7 @@ public class AutenticacionController {
       //Funciona
       return new LoginResponseDTO("00","",datoUsuario[0],datoUsuario[1]);
 
-    } catch (IOException e) {
-      return new LoginResponseDTO("99","Error: Ocurrió un problema","","");
-    } catch (InterruptedException e) {
+    } catch (Exception e) {
       return new LoginResponseDTO("99","Error: Ocurrió un problema","","");
     }
 

@@ -1,5 +1,7 @@
 package com.example.patitas_backend_a.controller;
 
+import com.example.patitas_backend_a.dto.CloseRequest;
+import com.example.patitas_backend_a.dto.CloseResponse;
 import com.example.patitas_backend_a.dto.LoginReqDTO;
 import com.example.patitas_backend_a.dto.LoginResponseDTO;
 import com.example.patitas_backend_a.service.AutenticacionService;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
 
@@ -36,6 +39,18 @@ public class AutenticacionController {
       return new LoginResponseDTO("99","Error: Ocurrió un problema","","");
     }
 
+  }
+
+  @PostMapping("/close")
+  public CloseResponse close(@RequestBody CloseRequest request){
+    try{
+      autenticacionService.cerrarSesion(request);
+      System.out.println("Cerrando sesion...");
+      return new CloseResponse("00","");
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+      return new CloseResponse("99","Ocurrió un problema en el servidor");
+    }
   }
 
 }

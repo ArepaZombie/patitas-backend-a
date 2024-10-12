@@ -1,5 +1,6 @@
 package com.example.patitas_backend_a.service.impl;
 
+import com.example.patitas_backend_a.dto.CloseRequest;
 import com.example.patitas_backend_a.dto.LoginReqDTO;
 import com.example.patitas_backend_a.service.AutenticacionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 @Service
 public class AutenticacionServiceImpl implements AutenticacionService {
@@ -27,7 +26,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
 
       String linea;
 
-
       while ( (linea = br.readLine()) != null ){
 
         String[] datos = linea.split(";");
@@ -35,7 +33,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         request.numeroDocumento().equals(datos[1]) &&
           request.password().equals(datos[2])
         ){
-
           datosUsuario = new String[2];
 
           datosUsuario[0]  = datos[3];
@@ -50,5 +47,21 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     }
 
     return datosUsuario;
+  }
+
+  @Override
+  public void cerrarSesion(CloseRequest request) throws IOException {
+
+    Resource resource = resourceLoader.getResource("classpath:cierres.txt");
+
+    try(BufferedWriter bw = new BufferedWriter(new FileWriter(resource.getFile(), true))) {
+      bw.write("PROBANDO PROBANDO");
+      bw.close();
+      System.out.println("asdasds");
+
+    }catch (IOException e){
+      throw new IOException(e);
+    }
+
   }
 }

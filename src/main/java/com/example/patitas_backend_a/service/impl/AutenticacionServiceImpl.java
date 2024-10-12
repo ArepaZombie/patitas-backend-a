@@ -9,6 +9,8 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Service
 public class AutenticacionServiceImpl implements AutenticacionService {
@@ -52,12 +54,36 @@ public class AutenticacionServiceImpl implements AutenticacionService {
   @Override
   public void cerrarSesion(CloseRequest request) throws IOException {
 
-    Resource resource = resourceLoader.getResource("classpath:cierres.txt");
+    Resource cierres = resourceLoader.getResource("classpath:cierres.txt");
+    Resource usuarios = resourceLoader.getResource("classpath:usuarios.txt");
+    String[] datosUsuario = null;
 
-    try(BufferedWriter bw = new BufferedWriter(new FileWriter(resource.getFile(), true))) {
-      bw.write("PROBANDO PROBANDO");
-      bw.close();
-      System.out.println("asdasds");
+    //Buscamos la info del usuario con su correo electronico
+    try(BufferedReader br = new BufferedReader(new FileReader(usuarios.getFile()))) {
+      String linea;
+      while ((linea = br.readLine()) != null) {
+
+        String[] datos = linea.split(";");
+        if (request.email().equals(datos[4])
+        ) {
+          datosUsuario = new String[2];
+
+          datosUsuario[0] = datos[0];
+          datosUsuario[1] = datos[1];
+          break;
+        }
+      }
+    }catch (IOException e){
+        throw new IOException(e);
+    }
+
+    //Ahora lo registramos
+    try(BufferedWriter bw = new BufferedWriter(new FileWriter(cierres.getFile(), true))) {
+      if(datosUsuario != null){
+        String registro ="Sesión cerrada: "+datosUsuario[0]+";"+datosUsuario[1]+";"+LocalDate.now();
+        System.out.println(registro);
+        bw.write(registro);
+      }
 
     }catch (IOException e){
       throw new IOException(e);

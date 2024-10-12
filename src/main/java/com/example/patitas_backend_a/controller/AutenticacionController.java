@@ -26,7 +26,7 @@ public class AutenticacionController {
   public LoginResponseDTO login(@RequestBody LoginReqDTO request){
 
     try {
-      Thread.sleep(Duration.ofSeconds(5));
+      //Thread.sleep(Duration.ofSeconds(5));
       String[] datoUsuario = autenticacionService.validarUsuario(request);
       System.out.println("Resultado: "+Arrays.toString(datoUsuario));
       if(datoUsuario ==null){
@@ -44,10 +44,10 @@ public class AutenticacionController {
   @PostMapping("/close")
   public CloseResponse close(@RequestBody CloseRequest request){
     try{
+      Thread.sleep(Duration.ofSeconds(3));
       autenticacionService.cerrarSesion(request);
-      System.out.println("Cerrando sesion...");
       return new CloseResponse("00","");
-    } catch (IOException e) {
+    } catch (IOException | InterruptedException e) {
       System.out.println(e.getMessage());
       return new CloseResponse("99","Ocurrió un problema en el servidor");
     }

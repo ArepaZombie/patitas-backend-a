@@ -4,16 +4,20 @@ import com.example.patitas_backend_a.dto.CloseRequest;
 import com.example.patitas_backend_a.dto.LoginReqDTO;
 import com.example.patitas_backend_a.service.AutenticacionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Service
 public class AutenticacionServiceImpl implements AutenticacionService {
+
+
+  @Value("${logout.file.path}")
+  private String filePath;
 
   @Autowired
   ResourceLoader resourceLoader;
@@ -77,14 +81,16 @@ public class AutenticacionServiceImpl implements AutenticacionService {
         throw new IOException(e);
     }
 
-    //Ahora lo registramos
-    try(BufferedWriter bw = new BufferedWriter(new FileWriter(cierres.getFile(), true))) {
-      if(datosUsuario != null){
-        String registro ="Sesión cerrada: "+datosUsuario[0]+";"+datosUsuario[1]+";"+LocalDate.now();
-        System.out.println(registro);
-        bw.write(registro);
-      }
 
+    //Ahora lo registramos
+    try(BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
+
+      if(datosUsuario != null){
+        String registro =datosUsuario[0]+";"+datosUsuario[1]+";"+LocalDate.now()+"\n";
+        bw.write(registro);
+        bw.flush();
+        System.out.println("Sesión cerrada: "+registro);
+      }
     }catch (IOException e){
       throw new IOException(e);
     }

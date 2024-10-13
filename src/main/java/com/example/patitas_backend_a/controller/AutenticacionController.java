@@ -29,7 +29,7 @@ public class AutenticacionController {
       //Thread.sleep(Duration.ofSeconds(5));
       String[] datoUsuario = autenticacionService.validarUsuario(request);
       System.out.println("Resultado: "+Arrays.toString(datoUsuario));
-      if(datoUsuario ==null){
+      if(datoUsuario == null){
         return new LoginResponseDTO("01","Error: Usuario no encontrado","","");
       }
       //Funciona

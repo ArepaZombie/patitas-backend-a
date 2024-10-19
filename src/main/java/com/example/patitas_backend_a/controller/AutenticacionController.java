@@ -1,9 +1,6 @@
 package com.example.patitas_backend_a.controller;
 
-import com.example.patitas_backend_a.dto.CloseRequest;
-import com.example.patitas_backend_a.dto.CloseResponse;
-import com.example.patitas_backend_a.dto.LoginReqDTO;
-import com.example.patitas_backend_a.dto.LoginResponseDTO;
+import com.example.patitas_backend_a.dto.*;
 import com.example.patitas_backend_a.service.AutenticacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +47,22 @@ public class AutenticacionController {
     } catch (IOException | InterruptedException e) {
       System.out.println(e.getMessage());
       return new CloseResponse("99","Ocurrió un problema en el servidor");
+    }
+  }
+
+  @PostMapping("/close_ef")
+  public CloseResponseEF closeEf(@RequestBody CloseRequestEF request){
+    if(request.numeroDocumento() == null || request.numeroDocumento().equals("")
+    || request.tipoDocumento() == null || request.tipoDocumento().equals("")){
+      return new CloseResponseEF("01","Falta información para el cierre de sesión");
+    }
+    try{
+      Thread.sleep(Duration.ofSeconds(3));
+      autenticacionService.cerrarSesionEF(request);
+      return new CloseResponseEF("00","");
+    } catch (IOException | InterruptedException e) {
+      System.out.println(e.getMessage());
+      return new CloseResponseEF("99","Ocurrió un problema en el servidor");
     }
   }
 

@@ -1,6 +1,7 @@
 package com.example.patitas_backend_a.service.impl;
 
 import com.example.patitas_backend_a.dto.CloseRequest;
+import com.example.patitas_backend_a.dto.CloseRequestEF;
 import com.example.patitas_backend_a.dto.LoginReqDTO;
 import com.example.patitas_backend_a.service.AutenticacionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,6 @@ public class AutenticacionServiceImpl implements AutenticacionService {
   @Override
   public void cerrarSesion(CloseRequest request) throws IOException {
 
-    Resource cierres = resourceLoader.getResource("classpath:cierres.txt");
     Resource usuarios = resourceLoader.getResource("classpath:usuarios.txt");
     String[] datosUsuario = null;
 
@@ -96,4 +96,18 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     }
 
   }
+
+  @Override
+  public void cerrarSesionEF(CloseRequestEF request) throws IOException {
+    //Ahora lo registramos
+    try(BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
+      String registro =request.tipoDocumento()+";"+request.numeroDocumento()+";"+LocalDate.now()+"\n";
+      bw.write(registro);
+      bw.flush();
+      System.out.println("Sesión cerrada: "+registro);
+    }catch (IOException e){
+      throw new IOException(e);
+    }
+  }
+
 }

@@ -57,7 +57,7 @@ public class AutenticacionController {
       return new CloseResponseEF("01","Falta información para el cierre de sesión");
     }
     try{
-      Thread.sleep(Duration.ofSeconds(11));
+      Thread.sleep(Duration.ofSeconds(5));
       autenticacionService.cerrarSesionEF(request);
       return new CloseResponseEF("00","");
     } catch (IOException | InterruptedException e) {
